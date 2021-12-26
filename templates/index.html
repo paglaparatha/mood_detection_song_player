@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Moodify{% endblock %}
+
+{% block header %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <a class="navbar-brand" href="#">Moodify</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<div class="col-12 px-5 my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="text-center font-weight-light">Admins</h1>
+            <table class="table">
+                <thead>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    {% for admin in users %}
+                    <tr>
+                        <td class="text-capitalize">{{ admin.name }}</td>
+                        <td>{{ admin.email }}</td>
+                        <td>{% if admin.email != user.email %}<a href="/delete-admin/{{ admin._id }}"
+                                class="btn btn-danger">&times;</a>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <form action="/add-admin" method="post" class="needs-validation row" novalidate>
+                <div class="form-group col-md-5">
+                    <input type="text" name="name" required placeholder="Enter admin name*" class="form-control">
+                    <p class="invalid-feedback">Please enter admin name.</p>
+                </div>
+
+                <div class="form-group col-md-5">
+                    <input type="text" name="email" required placeholder="Enter admin email*" class="form-control">
+                    <p class="invalid-feedback">Please enter admin email.</p>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <input type="submit" value="Create" name="create-admin" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <h1 class="text-center font-weight-light">Songs</h1>
+            <form action="/add-song" method="post" class="needs-validation row" enctype="multipart/form-data"
+                novalidate>
+                <div class="form-group col-md-6">
+                    <input type="text" name="name" required placeholder="Enter song name*" class="form-control">
+                    <p class="invalid-feedback">Please enter song name.</p>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <select name="mood" required class="form-control">
+                        <option value="" selected disabled>Select mood*</option>
+                        {% for mood in moods %}
+                        <option value="{{ mood }}">{{ mood | capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="invalid-feedback">Select a mood for the song.</p>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <select name="language" required class="form-control">
+                        <option value="" selected disabled>Select language*</option>
+                        {% for language in languages %}
+                        <option value="{{ language }}">{{ language | capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="invalid-feedback">Select a language for the song.</p>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <input type="text" name="artist" required placeholder="Enter artist name*" class="form-control">
+                    <p class="invalid-feedback">Please enter artist name.</p>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="cover">Select cover*</label>
+                    <input type="file" name="cover" required id="cover" accept="image/*" class="form-control">
+                    <p class="invalid-feedback">Select a cover for the song.</p>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="cover">Select song*</label>
+                    <input type="file" name="song" required id="song" accept="audio/*" class="form-control">
+                    <p class="invalid-feedback">Select a song.</p>
+                </div>
+
+                <div class="form-group col-12">
+                    <textarea name="lyrics" rows="4" placeholder="Enter song lyrics" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group col-12">
+                    <textarea name="description" rows="4" placeholder="Enter song description" maxlength="200"
+                        class="form-control"></textarea>
+                    <p class="invalid-feedback">Enter song description (optional).</p>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <input type="submit" value="Create" name="add-song" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
